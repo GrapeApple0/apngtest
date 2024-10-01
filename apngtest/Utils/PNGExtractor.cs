@@ -84,7 +84,7 @@ namespace apngtest.Utils
             var fdATTotalLength = 0;
             for (int i = 0; i < fdATs.Count; i++)
             {
-                fdATTotalLength += fdATs[i].Data.Length + 12;
+                fdATTotalLength += fdATs[i].Raw.Length + 8;
             }
             int total = 33 + fdATTotalLength + 12;
             if (phys.Raw != null)
