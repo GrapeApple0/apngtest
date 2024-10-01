@@ -41,12 +41,12 @@ namespace apngtest
                         if (fdATs.Count > 0)
                         {
                             var png = PNGExtractor.PNGFromfdAT(fctl, plte, ihdr, phys, fdATs);
-                            var frame = new Frame(png, fctl.DelayNum, fctl.Width, fctl.Height, fctl.XOffset, fctl.YOffset);
+                            var frame = new Frame(png, fctl.DelayDen, fctl.Width, fctl.Height, fctl.XOffset, fctl.YOffset);
                             frames.Add(frame);
                         }
                         if (IDATs.Count > 0) {
                             var png = PNGExtractor.PNGFromIDAT(fctl, plte, ihdr, phys, IDATs);
-                            var frame = new Frame(png, fctl.DelayNum, fctl.Width, fctl.Height, fctl.XOffset, fctl.YOffset);
+                            var frame = new Frame(png, fctl.DelayDen, fctl.Width, fctl.Height, fctl.XOffset, fctl.YOffset);
                             frames.Add(frame);
                         }
                         fctl = new fcTL(chunk.Data);
@@ -72,11 +72,13 @@ namespace apngtest
                     default:
                         break;
                 }
+                Console.WriteLine($"ChunkType: {header.ChunkType}");
                 // crc検証時はlengthの部分を取り除く
                 var dataCRC = CRC32.Calculate(bin.Skip(loc).Skip(4).Take(4 + (int)header.Length).ToArray());
                 if (dataCRC == chunk.CRC) Console.WriteLine($"CRC check OK");
                 else Console.WriteLine("CRC check failed");
                 Console.WriteLine($"CRC: chunk: {chunk.CRC}/data: {dataCRC}");
+                Console.WriteLine();
                 loc += (int)header.Length + 12;
             }
             return frames;
